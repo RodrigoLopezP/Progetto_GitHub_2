@@ -21,7 +21,11 @@
     <ClCompile Include="Tarchi.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="Cecchi.cpp">
+=======
+    <ClCompile Include="Dangelo.cpp">
+>>>>>>> Dangelo
       <Filter>File di origine</Filter>
     </ClCompile>
   </ItemGroup>
@@ -29,8 +33,13 @@
     <ClInclude Include="Tarchi.h">
       <Filter>File di origine</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="Cecchi.h">
       <Filter>File di intestazione</Filter>
+=======
+    <ClInclude Include="Dangelo.h">
+      <Filter>File di origine</Filter>
+>>>>>>> Dangelo
     </ClInclude>
   </ItemGroup>
 </Project>

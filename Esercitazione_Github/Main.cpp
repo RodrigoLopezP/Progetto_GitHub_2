@@ -3,6 +3,7 @@
 #include <process.h>
 #include "Cecchi.h"
 #include "Tarchi.h"
+#include "Dangelo.h"
 
 using namespace std;
 
@@ -22,23 +23,41 @@ int main()
     Struttura_Tarchi* V1_tarchi = new Struttura_Tarchi;// creare delle vostre strutture
 	Struttura_Tarchi* V2_tarchi = new Struttura_Tarchi;
 
+	Dangelo* S1_Dangelo = new Dangelo;
+	Dangelo* S2_Dangelo = new Dangelo;
+
 	V1_tarchi->sem = CreateSemaphore(NULL, 1, 1, NULL);
 	V2_tarchi->sem = CreateSemaphore(NULL, 1, 1, NULL);
+
 	V1_cecchi->s = CreateSemaphore(NULL, 1, 1, NULL);
 	V2_cecchi->s = CreateSemaphore(NULL, 1, 1, NULL);
+
+	S1_Dangelo->sem = CreateSemaphore(NULL, 1, 1, NULL);
+	S2_Dangelo->sem = CreateSemaphore(NULL, 1, 1, NULL);
+
 
 	Ins(V1_tarchi->vett); // potete utlizzare la funzione 'Ins' e 'stampa' gia create
 	Ins(V2_tarchi->vett);
 	Ins(V1_cecchi->v);
 	Ins(V2_cecchi->v);
 
+	Ins(S1_Dangelo->vett);
+	Ins(S2_Dangelo->vett);
+
 	cout << "\nInizio\n";
 
 	stampa(V1_tarchi->vett);
 	stampa(V2_tarchi->vett);
+
 	cout << "Vettori Cecchi non ordinati" << endl;
 	stampa(V1_cecchi->v);
 	stampa(V2_cecchi->v);
+
+	cout << "\nInizio (D'Angelo)\n";
+
+	stampa(S1_Dangelo->vett);
+	stampa(S2_Dangelo->vett);
+
 	cout << endl;
 
 	system("pause");
@@ -48,10 +67,16 @@ int main()
 	HANDLE ThreadCecchi1= (HANDLE)_beginthreadex(NULL, NULL, ThreadCecchi, (void*)V1_cecchi, NULL, 0);
 	HANDLE ThreadCecchi2 = (HANDLE)_beginthreadex(NULL, NULL, ThreadCecchi, (void*)V2_cecchi, NULL, 0);
 
+	HANDLE TH1_Dangelo = (HANDLE)_beginthreadex(NULL, NULL, Dangelo_Ordina, (void*)S1_Dangelo, NULL, 0);
+	HANDLE TH2_Dangelo = (HANDLE)_beginthreadex(NULL, NULL, Dangelo_Ordina, (void*)S2_Dangelo, NULL, 0);
+
 	DWORD Await1 = WaitForSingleObject(TH1_tarchi, Time);
 	DWORD Await2 = WaitForSingleObject(TH2_tarchi, Time);
 	WaitForSingleObject(ThreadCecchi1, INFINITE);
 	WaitForSingleObject(ThreadCecchi2, INFINITE);
+
+	DWORD Wait1_Dangelo = WaitForSingleObject(TH1_Dangelo, Time);
+	DWORD Wait2_Dangelo = WaitForSingleObject(TH2_Dangelo, Time);
 
 	if (Await1 == 0x00000102L) // [258]
 		cout << "Tempo di attesa terminato nel primo Thread\n";
@@ -62,9 +87,16 @@ int main()
 
 	stampa(V1_tarchi->vett);
 	stampa(V2_tarchi->vett);
+
 	cout << "Vettori Cecchi ordinati" << endl;
 	stampa(V1_cecchi->v);
 	stampa(V2_cecchi->v);
+
+	
+	cout << "\nFine (D'Angelo)\n";
+
+	stampa(S1_Dangelo->vett);
+	stampa(S2_Dangelo->vett);
 
 	system("pause");
 
@@ -77,10 +109,18 @@ int main()
 	CloseHandle(V1_cecchi->s);
 	CloseHandle(V2_cecchi->s);
 
+	CloseHandle(TH1_Dangelo);
+	CloseHandle(TH1_Dangelo);
+	CloseHandle(S1_Dangelo->sem);
+	CloseHandle(S2_Dangelo->sem);
+
 	delete V1_tarchi;
 	delete V2_tarchi;
 	delete V1_cecchi;
 	delete V2_cecchi;
+
+	delete S1_Dangelo;
+	delete S2_Dangelo;
 
 	return 0;
 }
