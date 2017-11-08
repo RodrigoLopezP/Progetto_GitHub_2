@@ -146,10 +146,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Cecchi.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Tarchi.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Cecchi.h" />
     <ClInclude Include="Tarchi.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
