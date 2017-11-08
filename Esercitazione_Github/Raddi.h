@@ -2,7 +2,7 @@
 
 #define LF 5
 
-struct Struttura
+struct Struttura_Raddi
 {
 	HANDLE semaphore;
 	int vettore[LF];
