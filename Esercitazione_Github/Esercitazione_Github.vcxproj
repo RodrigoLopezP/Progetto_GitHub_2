@@ -146,20 +146,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-<<<<<<< HEAD
+    <ClCompile Include="Biondi.cpp" />
     <ClCompile Include="Cecchi.cpp" />
-=======
     <ClCompile Include="Dangelo.cpp" />
->>>>>>> Dangelo
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Tarchi.cpp" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
+    <ClInclude Include="Biondi.h" />
     <ClInclude Include="Cecchi.h" />
-=======
     <ClInclude Include="Dangelo.h" />
->>>>>>> Dangelo
     <ClInclude Include="Tarchi.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
