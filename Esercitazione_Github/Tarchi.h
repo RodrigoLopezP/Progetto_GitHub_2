@@ -3,7 +3,7 @@
 
 #define MAX 5
 
-struct Struttura
+struct Struttura_Tarchi
 {
 	HANDLE sem;
 	int vett[MAX];

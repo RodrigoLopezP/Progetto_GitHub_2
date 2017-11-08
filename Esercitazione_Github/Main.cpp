@@ -16,8 +16,8 @@ int main()
 {
 	srand(unsigned(time(NULL)));
 
-	Struttura* V1_tarchi = new Struttura; // creare delle vostre strutture
-	Struttura* V2_tarchi = new Struttura;
+	Struttura_Tarchi* V1_tarchi = new Struttura_Tarchi; // creare delle vostre strutture
+	Struttura_Tarchi* V2_tarchi = new Struttura_Tarchi;
 
 	V1_tarchi->sem = CreateSemaphore(NULL, 1, 1, NULL);
 	V2_tarchi->sem = CreateSemaphore(NULL, 1, 1, NULL);
