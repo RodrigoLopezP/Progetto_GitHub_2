@@ -21,9 +21,15 @@
     <ClCompile Include="Tarchi.cpp">
       <Filter>File di origine</Filter>
     </ClCompile>
+    <ClCompile Include="Dangelo.cpp">
+      <Filter>File di origine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tarchi.h">
+      <Filter>File di origine</Filter>
+    </ClInclude>
+    <ClInclude Include="Dangelo.h">
       <Filter>File di origine</Filter>
     </ClInclude>
   </ItemGroup>
