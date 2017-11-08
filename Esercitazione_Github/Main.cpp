@@ -4,6 +4,7 @@
 #include "Biondi.h"
 #include "Cecchi.h"
 #include "Dangelo.h"
+#include"kumar.h"
 #include "Raddi.h"
 #include "rigacci.h"
 #include "Tarchi.h"
@@ -32,6 +33,8 @@ int main()
 	StrutturaCecchi* V2_cecchi = new StrutturaCecchi;
 	Dangelo* S1_Dangelo = new Dangelo;
 	Dangelo* S2_Dangelo = new Dangelo;
+	Struttura_Kumar* V1_kumar = new Struttura_Kumar;
+	Struttura_Kumar* V2_kumar = new Struttura_Kumar;
 	Struttura_Raddi* V1_Raddi = new Struttura_Raddi;
 	Struttura_Raddi* V2_Raddi = new Struttura_Raddi;
 	Struttura_Rigacci* V1_rigacci = new  Struttura_Rigacci;
@@ -47,6 +50,8 @@ int main()
 	V2_cecchi->s = CreateSemaphore(NULL, 1, 1, NULL);
 	S1_Dangelo->sem = CreateSemaphore(NULL, 1, 1, NULL);
 	S2_Dangelo->sem = CreateSemaphore(NULL, 1, 1, NULL);
+	V1_kumar->sem = CreateSemaphore(NULL, 1, 1, NULL);
+	V2_kumar->sem = CreateSemaphore(NULL, 1, 1, NULL);
 	V1_Raddi->semaphore = CreateSemaphore(NULL, 1, 1, NULL);
 	V2_Raddi->semaphore = CreateSemaphore(NULL, 1, 1, NULL);
 	V1_rigacci->sem = CreateSemaphore(NULL, 1, 1, NULL);
@@ -62,6 +67,8 @@ int main()
 	Ins(V2_cecchi->v);
 	Ins(S1_Dangelo->vett);
 	Ins(S2_Dangelo->vett);
+	Ins(V1_kumar->vett);
+	Ins(V2_kumar->vett);
 	Ins(V1_Raddi->vettore);
 	Ins(V2_Raddi->vettore);
 	Ins(V1_rigacci->vett);
@@ -92,6 +99,10 @@ int main()
 	stampa(S1_Dangelo->vett);
 	stampa(S2_Dangelo->vett);
 
+	cout << "Inizio (Kumar)"<<endl;
+	stampa(V1_kumar->vett);
+	stampa(V2_kumar->vett);
+
 	cout << "\nInizio (Raddi)\n";
 	stampa(V1_Raddi->vettore);
 	stampa(V2_Raddi->vettore);
@@ -106,6 +117,8 @@ int main()
 	HANDLE TH1_tarchi = (HANDLE)_beginthreadex(NULL, NULL, Tarchi_mythread, (void*)V1_tarchi, NULL, 0);
 	HANDLE TH2_tarchi = (HANDLE)_beginthreadex(NULL, NULL, Tarchi_mythread, (void*)V2_tarchi, NULL, 0); // creare i vostri thread
 
+	HANDLE TH1_kumar = (HANDLE)_beginthreadex(NULL, NULL, Kumar_Funzione_Ordinamento, (void*)V1_kumar, NULL, 0);
+	HANDLE TH2_kumar = (HANDLE)_beginthreadex(NULL, NULL, Kumar_Funzione_Ordinamento, (void*)V2_kumar, NULL, 0);
 
 	HANDLE TH1_Terraglia = (HANDLE)_beginthreadex(NULL, NULL, Terraglia_Ordina, (void*)S1_Terraglia, NULL, 0);
 	HANDLE TH2_Terraglia = (HANDLE)_beginthreadex(NULL, NULL, Terraglia_Ordina, (void*)S2_Terraglia, NULL, 0);
@@ -113,8 +126,12 @@ int main()
 	DWORD Await1 = WaitForSingleObject(TH1_tarchi, Time);
 	DWORD Await2 = WaitForSingleObject(TH2_tarchi, Time);
 
+	DWORD Await_kumar1 = WaitForSingleObject(TH1_kumar, Time);
+	DWORD Await_kumar2 = WaitForSingleObject(TH2_kumar, Time);
+
 	WaitForSingleObject(TH1_Terraglia, INFINITE);
 	WaitForSingleObject(TH2_Terraglia, INFINITE);
+
 
 
 	HANDLE TH1_rigacci = (HANDLE)_beginthreadex(NULL,NULL, rigacci, (void*)V1_rigacci, NULL, 0);
@@ -155,15 +172,21 @@ int main()
 	DWORD Wait1_Dangelo = WaitForSingleObject(TH1_Dangelo, Time);
 	DWORD Wait2_Dangelo = WaitForSingleObject(TH2_Dangelo, Time);
 
-	if (Await1 == 0x00000102L) // [258]
+	if (Await1 == 0x00000102L || Await_kumar1 == 0x00000102L) // [258]
 		cout << "Tempo di attesa terminato nel primo Thread\n";
-	else if (Await2 == 0x00000102L) // [258]
+	else if (Await2 == 0x00000102L || Await_kumar2 == 0x00000102L) // [258]
 		cout << "Tempo di attesa terminato nel secondo Thread\n";
 
 	cout << "\nFine (Tarchi)\n";
 	stampa(V1_tarchi->vett);
 	stampa(V2_tarchi->vett);
 	cout << endl;
+
+	cout << "Fine (Tarchi)"<<endl;
+	stampa(V1_kumar->vett);
+	stampa(V2_kumar->vett);
+	cout << endl;
+
 	cout << "\nFine (Terraglia)\n";
 	stampa(S1_Terraglia->array);
 	stampa(S2_Terraglia->array);
@@ -193,11 +216,19 @@ int main()
 	CloseHandle(TH1_tarchi); // fate le vostre chiusure
 	CloseHandle(TH2_tarchi);
 	
+	CloseHandle(TH1_kumar);
+	CloseHandle(TH2_kumar);
+
 	CloseHandle(TH1_rigacci);
     CloseHandle(TH2_rigacci);
     
 	CloseHandle(V1_tarchi->sem);
 	CloseHandle(V2_tarchi->sem);
+
+	CloseHandle(V1_kumar->sem);
+	CloseHandle(V2_kumar->sem);
+	delete V1_kumar;
+	delete V2_kumar;
 
 	CloseHandle(threadBiondi1); 
 	CloseHandle(threadBiondi2); 
