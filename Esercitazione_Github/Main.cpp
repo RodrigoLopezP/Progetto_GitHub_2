@@ -12,6 +12,7 @@
 #include "SCOTTOX.h"
 #include "Raddi.h"
 #include "dige.h"
+#include "MarchiH.h"
 
 
 
@@ -46,6 +47,8 @@ int main()
 	Struttura_Tarchi* V2_tarchi = new Struttura_Tarchi;
 	Struttura_Terraglia* S1_Terraglia = new Struttura_Terraglia; 
 	Struttura_Terraglia* S2_Terraglia = new Struttura_Terraglia; 
+	Struttura* V1_marchi = new Struttura;
+	Struttura* V2_marchi = new Struttura;
 
 	V1_Biondi->sem = CreateSemaphore(NULL, 1, 1, NULL);
 	V2_Biondi->sem = CreateSemaphore(NULL, 1, 1, NULL);
@@ -65,6 +68,8 @@ int main()
 	S2_Terraglia->semaforo = CreateSemaphore(NULL, 1, 1, NULL);
 	V1_Dige->sem = CreateSemaphore(NULL, 1, 1, NULL);
 	V2_Dige->sem = CreateSemaphore(NULL, 1, 1, NULL);
+	V1_marchi->sem = CreateSemaphore(NULL, 1, 1, NULL);
+	V2_marchi->sem = CreateSemaphore(NULL, 1, 1, NULL);
 
 	Ins(V1_Biondi->vett);
 	Ins(V2_Biondi->vett);
@@ -84,6 +89,8 @@ int main()
 	Ins(S2_Terraglia->array);
 	Ins(V1_Dige->vett);
 	Ins(V2_Dige->vett);
+	Ins(V1_marchi->vett); 
+	Ins(V2_marchi->vett)
 	
 
 	cout << "\nInizio (Tarchi)\n";
@@ -121,6 +128,10 @@ int main()
 	cout << "\nInizio (Biondi)\n";
 	stampa(V1_Biondi->vett);
 	stampa(V2_Biondi->vett);
+
+	cout << "\nInizio (Tarchi)\n";
+	stampa(V1_marchi->vett);
+	stampa(V2_marchi->vett);
 	cout << endl;
 
 	system("pause");
@@ -184,7 +195,11 @@ int main()
 	WaitForSingleObject(ThreadCecchi1, INFINITE);
 	WaitForSingleObject(ThreadCecchi2, INFINITE);
 
+	HANDLE TH1_marchi = (HANDLE)_beginthreadex(NULL, NULL, Marchi_Ordina, (void*)V1_marchi, NULL, 0);
+	HANDLE TH2_marchi = (HANDLE)_beginthreadex(NULL, NULL, Marchi_Ordina, (void*)V2_marchi, NULL, 0);
 
+	DWORD Await1 = WaitForSingleObject(TH1_marchi, Time);
+	DWORD Await2 = WaitForSingleObject(TH2_marchi, Time);
 
 	DWORD Wait1_Dangelo = WaitForSingleObject(TH1_Dangelo, Time);
 	DWORD Wait2_Dangelo = WaitForSingleObject(TH2_Dangelo, Time);
@@ -232,6 +247,10 @@ int main()
 	cout << "\nFine (D'Angelo)\n";
 	stampa(S1_Dangelo->vett);
 	stampa(S2_Dangelo->vett);
+	cout << "\nFine (Marchi)\n";
+	stampa(V1_marchi->vett);
+	stampa(V2_marchi->vett);
+	cout << endl;
 
 	system("pause");
 
@@ -297,6 +316,9 @@ int main()
 	CloseHandle(S1_Dangelo->sem);
 	CloseHandle(S2_Dangelo->sem);
 
+	CloseHandle(TH1_marchi);
+	CloseHandle(TH2_marchi);
+
 	delete V1_tarchi;
 	delete V2_tarchi;
 	
@@ -304,6 +326,8 @@ int main()
 	delete V2_cecchi;
 	delete V1_Raddi;
 	delete V2_Raddi;
+	delete V1_marchi;
+	delete V2_marchi;
     
     //inizio Becucci
     Struttura_Becucci* V1_becucci = new Struttura_Becucci;

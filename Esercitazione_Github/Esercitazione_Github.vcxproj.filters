@@ -6,11 +6,13 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Tarchi.cpp" />
     <ClCompile Include="Biondi.cpp" />
+    <ClCompile Include="MarchiCPP.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cecchi.h" />
     <ClInclude Include="Dangelo.h" />
     <ClInclude Include="Tarchi.h" />
     <ClInclude Include="Biondi.h" />
+    <ClInclude Include="MarchiH.h" />
   </ItemGroup>
 </Project>
