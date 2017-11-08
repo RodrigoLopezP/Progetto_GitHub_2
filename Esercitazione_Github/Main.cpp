@@ -164,9 +164,6 @@ int main()
 
 	HANDLE TH1_rigacci = (HANDLE)_beginthreadex(NULL,NULL, rigacci, (void*)V1_rigacci, NULL, 0);
 	HANDLE TH2_rigacci = (HANDLE)_beginthreadex(NULL,NULL, rigacci, (void*)V1_rigacci, NULL, 0);
-
-	DWORD Await1 = WaitForSingleObject(TH1_tarchi, Time);
-	DWORD Await2 = WaitForSingleObject(TH2_tarchi, Time);
 	
 	DWORD Await_rigacci = WaitForSingleObject(TH1_rigacci, Time);
 	DWORD Await_rigacci2 = WaitForSingleObject(TH2_rigacci, Time);
@@ -261,7 +258,7 @@ int main()
 	CloseHandle(TH2_kumar);
 
 	CloseHandle(TH1_rigacci);
-    CloseHandle(TH2_rigacci);
+    	CloseHandle(TH2_rigacci);
     
 	CloseHandle(V1_tarchi->sem);
 	CloseHandle(V2_tarchi->sem);
@@ -290,14 +287,9 @@ int main()
 	CloseHandle(S1_Terraglia->semaforo);
 	CloseHandle(S2_Terraglia->semaforo);
 
-	delete V1_tarchi;
-	delete V2_tarchi;
-
 	CloseHandle(V1_rigacci->sem);
 	CloseHandle(V2_rigacci->sem);
 
-	delete V1_tarchi;
-	delete V2_tarchi;
 	
 	delete V1_rigacci;
 	delete V2_rigacci;
