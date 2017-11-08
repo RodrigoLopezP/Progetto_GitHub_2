@@ -3,7 +3,7 @@
 unsigned __stdcall Tarchi_mythread(void* data)
 {
 	int temp;
-	Struttura *V = (Struttura *)data;
+	Struttura_Tarchi *V = (Struttura_Tarchi *)data;
 	int* d = V->vett;
 	for (int i = 0; i < (MAX - 1); i++)
 	{
