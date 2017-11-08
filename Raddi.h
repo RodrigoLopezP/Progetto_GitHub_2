@@ -1,1 +1,0 @@
-void Ordina(void* str);
