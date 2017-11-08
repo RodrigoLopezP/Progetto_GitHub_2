@@ -9,8 +9,9 @@
 #include "rigacci.h"
 #include "Tarchi.h"
 #include "Terraglia.h"
-#include <SCOTTOX.h>
-#include <Raddi.h>
+#include "SCOTTOX.h"
+#include "Raddi.h"
+#include "dige.h"
 
 
 
@@ -27,6 +28,8 @@ int main()
 {
 	srand(unsigned(time(NULL)));
 
+	dige_struct* V1_Dige = new dige_struct;
+	dige_struct* V2_Dige = new dige_struct;
 	strutturaBiondi* V1_Biondi = new strutturaBiondi;
 	strutturaBiondi* V2_Biondi = new strutturaBiondi;
 	StrutturaCecchi* V1_cecchi = new StrutturaCecchi;
@@ -60,6 +63,8 @@ int main()
 	V2_tarchi->sem = CreateSemaphore(NULL, 1, 1, NULL);
 	S1_Terraglia->semaforo = CreateSemaphore(NULL, 1, 1, NULL);
 	S2_Terraglia->semaforo = CreateSemaphore(NULL, 1, 1, NULL);
+	V1_Dige->sem = CreateSemaphore(NULL, 1, 1, NULL);
+	V2_Dige->sem = CreateSemaphore(NULL, 1, 1, NULL);
 
 	Ins(V1_Biondi->vett);
 	Ins(V2_Biondi->vett);
@@ -77,11 +82,17 @@ int main()
 	Ins(V2_tarchi->vett);
 	Ins(S1_Terraglia->array);
 	Ins(S2_Terraglia->array);
+	Ins(V1_Dige->vett);
+	Ins(V2_Dige->vett);
 	
 
 	cout << "\nInizio (Tarchi)\n";
 	stampa(V1_tarchi->vett);
 	stampa(V2_tarchi->vett);
+
+	cout << "\nInizio (Di Genua)\n";
+	stampa(V1_Dige->vett);
+	stampa(V2_Dige->vett);
 
 	cout << "\nInizio (Terraglia)\n";
 	stampa(V1_Terraglia->array);
@@ -116,6 +127,12 @@ int main()
 
 	HANDLE TH1_tarchi = (HANDLE)_beginthreadex(NULL, NULL, Tarchi_mythread, (void*)V1_tarchi, NULL, 0);
 	HANDLE TH2_tarchi = (HANDLE)_beginthreadex(NULL, NULL, Tarchi_mythread, (void*)V2_tarchi, NULL, 0); // creare i vostri thread
+
+	HANDLE th1_Digenua = (HANDLE)_beginthreadex(NULL, NULL, th_dige, (void*)V1_Dige, NULL, 0);
+	HANDLE th2_Digenua = (HANDLE)_beginthreadex(NULL, NULL, th_dige, (void*)V2_Dige, NULL, 0);
+
+	DWORD Await_dige1 = WaitForSingleObject(th_Digenua, Time);
+	DWORD Await_dige2 = WaitForSingleObject(th_Digenua, Time);
 
 	HANDLE TH1_kumar = (HANDLE)_beginthreadex(NULL, NULL, Kumar_Funzione_Ordinamento, (void*)V1_kumar, NULL, 0);
 	HANDLE TH2_kumar = (HANDLE)_beginthreadex(NULL, NULL, Kumar_Funzione_Ordinamento, (void*)V2_kumar, NULL, 0);
@@ -182,6 +199,11 @@ int main()
 	stampa(V2_tarchi->vett);
 	cout << endl;
 
+	cout << "\nFine (Di Genua)\n";
+	stampa(V1_Dige->vett);
+	stampa(V2_Dige->vett);
+	cout << endl;
+
 	cout << "Fine (Tarchi)"<<endl;
 	stampa(V1_kumar->vett);
 	stampa(V2_kumar->vett);
@@ -229,6 +251,13 @@ int main()
 	CloseHandle(V2_kumar->sem);
 	delete V1_kumar;
 	delete V2_kumar;
+
+	CloseHandle(V1_Dige->sem);
+	CloseHandle(V2_Dige->sem);
+	CloseHandle(th1_Digenua);
+	CloseHandle(th2_Digenua);
+	delete V1_Dige;
+	delete V2_Dige;
 
 	CloseHandle(threadBiondi1); 
 	CloseHandle(threadBiondi2); 
