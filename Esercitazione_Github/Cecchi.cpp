@@ -16,7 +16,6 @@ unsigned __stdcall ThreadCecchi(void *data)
 	int* v = sPtr->v;//dereferenziazione vettore
 	int temp;//variabile temporanea di appoggio
 
-	//bubble sort
 	for (int i = 0;i<(MAX-1);i++)
 	{
 			WaitForSingleObject(sPtr->s, INFINITE);//blocco regolato da semaforo
