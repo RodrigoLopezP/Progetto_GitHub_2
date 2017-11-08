@@ -4,9 +4,12 @@
 #include "Cecchi.h"
 #include "Raddi.h"
 #include "Tarchi.h"
+
 #include "Terraglia.h"
 #include <SCOTTOX.h>
 #include <Raddi.h>
+
+#include "Dangelo.h"
 
 #include "rigacci.h"
 
@@ -48,8 +51,16 @@ int main()
 	V2_Raddi->semaphore = CreateSemaphore(NULL, 1, 1, NULL);
 	Struttura_Rigacci* V1_rigacci = new  Struttura_Rigacci;
 	Struttura_Rigacci* V2_rigacci = new  Struttura_Rigacci;
+
+
+	Dangelo* S1_Dangelo = new Dangelo;
+	Dangelo* S2_Dangelo = new Dangelo;
+
+
+
 	V1_tarchi->sem = CreateSemaphore(NULL, 1, 1, NULL);
 	V2_tarchi->sem = CreateSemaphore(NULL, 1, 1, NULL);
+
 	V1_rigacci->sem = CreateSemaphore(NULL, 1, 1, NULL);
 	V2_rigacci->sem = CreateSemaphore(NULL, 1, 1, NULL);
 
@@ -58,8 +69,13 @@ int main()
 	Ins(V2_tarchi->vett);
 	Ins(V1_rigacci->vett);
 	Ins(V2_rigacci->vett);
+
 	V1_cecchi->s = CreateSemaphore(NULL, 1, 1, NULL);
 	V2_cecchi->s = CreateSemaphore(NULL, 1, 1, NULL);
+
+	S1_Dangelo->sem = CreateSemaphore(NULL, 1, 1, NULL);
+	S2_Dangelo->sem = CreateSemaphore(NULL, 1, 1, NULL);
+
 
 	Ins(V1_tarchi->vett); // potete utlizzare la funzione 'Ins' e 'stampa' gia create
 	Ins(V2_tarchi->vett);
@@ -69,6 +85,9 @@ int main()
 	Ins(V2_Raddi->vettore);
 
 
+	Ins(S1_Dangelo->vett);
+	Ins(S2_Dangelo->vett);
+
 	cout << "\nInizio\n";
 
 	stampa(V1_tarchi->vett);
@@ -77,11 +96,20 @@ int main()
 	stampa(V1_Terraglia->array);
 	stampa(V2_Terraglia->array);
 
+
 	stampa(V1_rigacci->vett);
 	stampa(V2_rigacci->vett);
+
 	cout << "Vettori Cecchi non ordinati" << endl;
 	stampa(V1_cecchi->v);
 	stampa(V2_cecchi->v);
+
+	cout << "\nInizio (D'Angelo)\n";
+
+	stampa(S1_Dangelo->vett);
+	stampa(S2_Dangelo->vett);
+
+
 	stampa(V1_Raddi->vettore);
 	stampa(V2_Raddi->vettore);
 
@@ -92,6 +120,7 @@ int main()
 	HANDLE TH1_tarchi = (HANDLE)_beginthreadex(NULL, NULL, Tarchi_mythread, (void*)V1_tarchi, NULL, 0);
 	HANDLE TH2_tarchi = (HANDLE)_beginthreadex(NULL, NULL, Tarchi_mythread, (void*)V2_tarchi, NULL, 0); // creare i vostri thread
 
+
 	HANDLE TH1_Terraglia = (HANDLE)_beginthreadex(NULL, NULL, Terraglia_Ordina, (void*)S1_Terraglia, NULL, 0);
 	HANDLE TH2_Terraglia = (HANDLE)_beginthreadex(NULL, NULL, Terraglia_Ordina, (void*)S2_Terraglia, NULL, 0);
 	DWORD Await1 = WaitForSingleObject(TH1_tarchi, Time);
@@ -99,25 +128,38 @@ int main()
 	WaitForSingleObject(TH1_Terraglia, 
 	WaitForSingleObject(TH2_Terraglia, INFINITE);
 
+
+
 	HANDLE TH1_rigacci = (HANDLE)_beginthreadex(NULL,NULL, rigacci, (void*)V1_rigacci, NULL, 0);
 	HANDLE TH2_rigacci = (HANDLE)_beginthreadex(NULL,NULL, rigacci, (void*)V1_rigacci, NULL, 0);
 
 	DWORD Await1 = WaitForSingleObject(TH1_tarchi, Time);
 	DWORD Await2 = WaitForSingleObject(TH2_tarchi, Time);
+	
 	DWORD Await_rigacci = WaitForSingleObject(TH1_rigacci, Time);
 	DWORD Await_rigacci2 = WaitForSingleObject(TH2_rigacci, Time);
+	
 	HANDLE ThreadCecchi1= (HANDLE)_beginthreadex(NULL, NULL, ThreadCecchi, (void*)V1_cecchi, NULL, 0);
 	HANDLE ThreadCecchi2 = (HANDLE)_beginthreadex(NULL, NULL, ThreadCecchi, (void*)V2_cecchi, NULL, 0);
 	HANDLE ThreadRaddi1= (HANDLE)_beginthreadex(NULL, NULL, Raddi_Ordina, (void*)V1_Raddi, NULL, 0);
 	HANDLE ThreadRaddi2 = (HANDLE)_beginthreadex(NULL, NULL, Raddi_Ordina, (void*)V2_Raddi, NULL, 0);
 
+	HANDLE TH1_Dangelo = (HANDLE)_beginthreadex(NULL, NULL, Dangelo_Ordina, (void*)S1_Dangelo, NULL, 0);
+	HANDLE TH2_Dangelo = (HANDLE)_beginthreadex(NULL, NULL, Dangelo_Ordina, (void*)S2_Dangelo, NULL, 0);
+
 	WaitForSingleObject(ThreadRaddi1, Time);
 	WaitForSingleObject(ThreadRaddi2, Time);
+
 	DWORD Await1 = WaitForSingleObject(TH1_tarchi, Time);
 	DWORD Await2 = WaitForSingleObject(TH2_tarchi, Time);
+	
 	WaitForSingleObject(ThreadCecchi1, INFINITE);
 	WaitForSingleObject(ThreadCecchi2, INFINITE);
 
+
+
+	DWORD Wait1_Dangelo = WaitForSingleObject(TH1_Dangelo, Time);
+	DWORD Wait2_Dangelo = WaitForSingleObject(TH2_Dangelo, Time);
 
 	if (Await1 == 0x00000102L) // [258]
 		cout << "Tempo di attesa terminato nel primo Thread\n";
@@ -129,11 +171,14 @@ int main()
 	stampa(V1_tarchi->vett);
 	stampa(V2_tarchi->vett);
 
+
 	stampa(S1_Terraglia->array);
 	stampa(S2_Terraglia->array);
 
+
 	stampa(V1_rigacci->vett);
 	stampa(V2_rigacci->vett);	
+
 	cout << "Vettori Cecchi ordinati" << endl;
 	stampa(V1_cecchi->v);
 	stampa(V2_cecchi->v);
@@ -141,12 +186,20 @@ int main()
 	stampa(V2_Raddi->vettore);
 
 
+	
+	cout << "\nFine (D'Angelo)\n";
+
+	stampa(S1_Dangelo->vett);
+	stampa(S2_Dangelo->vett);
+
 	system("pause");
 
 	CloseHandle(TH1_tarchi); // fate le vostre chiusure
 	CloseHandle(TH2_tarchi);
+	
 	CloseHandle(TH1_rigacci);
     CloseHandle(TH2_rigacci);
+    
 	CloseHandle(V1_tarchi->sem);
 	CloseHandle(V2_tarchi->sem);
 
@@ -165,17 +218,27 @@ int main()
 
 	delete V1_tarchi;
 	delete V2_tarchi;
+	
 	delete V1_rigacci;
 	delete V2_rigacci
+	
 	CloseHandle(ThreadCecchi1);
 	CloseHandle(ThreadCecchi2);
+	
 	CloseHandle(V1_cecchi->s);
 	CloseHandle(V2_cecchi->s);
 	CloseHandle(V1_Raddi->semaphore);
 	CloseHandle(V2_Raddi->semaphore);
 
+	CloseHandle(TH1_Dangelo);
+	CloseHandle(TH1_Dangelo);
+	
+	CloseHandle(S1_Dangelo->sem);
+	CloseHandle(S2_Dangelo->sem);
+
 	delete V1_tarchi;
 	delete V2_tarchi;
+	
 	delete V1_cecchi;
 	delete V2_cecchi;
 	delete V1_Raddi;
@@ -188,6 +251,8 @@ int main()
 	V1_becucci->sem = CreateSemaphore(NULL, 1, 1, NULL);
 	V2_becucci->sem = CreateSemaphore(NULL, 1, 1, NULL);
 
+	delete S1_Dangelo;
+	delete S2_Dangelo;
 
 	Ins(V1_becucci->vett);
 	Ins(V2_becucci->vett);
@@ -226,7 +291,7 @@ int main()
 
 	delete V1_becucci;
 	delete V2_becucci;
-	
+
 	return 0;
 }
 
