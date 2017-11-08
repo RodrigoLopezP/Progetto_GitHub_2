@@ -131,7 +131,52 @@ int main()
 	delete V2_cecchi;
 	delete V1_Raddi;
 	delete V2_Raddi;
+    
+    //inizio Becucci
+    Struttura_Becucci* V1_becucci = new Struttura_Becucci;
+	Struttura_Becucci* V2_becucci = new Struttura_Becucci;
 
+	V1_becucci->sem = CreateSemaphore(NULL, 1, 1, NULL);
+	V2_becucci->sem = CreateSemaphore(NULL, 1, 1, NULL);
+
+
+	Ins(V1_becucci->vett);
+	Ins(V2_becucci->vett);
+
+	cout << "\nInizio\n";
+
+	stampa(V1_becucci->vett);
+	stampa(V2_becucci->vett);
+	cout << endl;
+
+	system("pause");
+
+	HANDLE TH1_becucci = (HANDLE)_beginthreadex(NULL, NULL, Becucci_mythread, (void*)V1_becucci, NULL, 0);
+	HANDLE TH2_becucci = (HANDLE)_beginthreadex(NULL, NULL, Becucci_mythread, (void*)V2_becucci, NULL, 0);
+
+	DWORD Await1 = WaitForSingleObject(TH1_becucci, Time);
+	DWORD Await2 = WaitForSingleObject(TH2_becucci, Time);
+
+	if (Await_Becucci == 0x00000102L)
+		cout << "Tempo di attesa terminato nel primo Thread\n";
+	else if (Await_Becucci2 == 0x00000102L)
+		cout << "Tempo di attesa terminato nel secondo Thread\n";
+
+	cout << "\nFine\n";
+
+	stampa(V1_becucci->vett);
+	stampa(V2_becucci->vett);
+
+	system("pause");
+
+	CloseHandle(TH1_becucci);
+	CloseHandle(TH2_becucci);
+	CloseHandle(V1_becucci->sem);
+	CloseHandle(V2_becucci->sem);
+
+	delete V1_becucci;
+	delete V2_becucci;
+	
 	return 0;
 }
 
