@@ -2,6 +2,7 @@
 #include <time.h>
 #include <process.h>
 #include "Cecchi.h"
+#include "Raddi.h"
 #include "Tarchi.h"
 #include "Dangelo.h"
 #include "rigacci.h"
@@ -21,14 +22,22 @@ int main()
 
 	StrutturaCecchi* V1_cecchi = new StrutturaCecchi;
 	StrutturaCecchi* V2_cecchi = new StrutturaCecchi;
-    Struttura_Tarchi* V1_tarchi = new Struttura_Tarchi;// creare delle vostre strutture
+	Struttura_Raddi* V1_Raddi = new Struttura_Raddi;
+	Struttura_Raddi* V2_Raddi = new Struttura_Raddi;
+    	Struttura_Tarchi* V1_tarchi = new Struttura_Tarchi;// creare delle vostre strutture
 	Struttura_Tarchi* V2_tarchi = new Struttura_Tarchi;
+	
+	V1_Raddi->semaphore = CreateSemaphore(NULL, 1, 1, NULL);
+	V2_Raddi->semaphore = CreateSemaphore(NULL, 1, 1, NULL);
 	Struttura_Rigacci* V1_rigacci = new  Struttura_Rigacci;
 	Struttura_Rigacci* V2_rigacci = new  Struttura_Rigacci;
+<<<<<<< HEAD
 
 	Dangelo* S1_Dangelo = new Dangelo;
 	Dangelo* S2_Dangelo = new Dangelo;
 
+=======
+>>>>>>> 6d2ce7f2e1d01b506672f67d4b7c01ff89d00067
 	V1_tarchi->sem = CreateSemaphore(NULL, 1, 1, NULL);
 	V2_tarchi->sem = CreateSemaphore(NULL, 1, 1, NULL);
 
@@ -52,6 +61,8 @@ int main()
 	Ins(V2_tarchi->vett);
 	Ins(V1_cecchi->v);
 	Ins(V2_cecchi->v);
+	Ins(V1_Raddi->vettore);
+	Ins(V2_Raddi->vettore);
 
 	Ins(S1_Dangelo->vett);
 	Ins(S2_Dangelo->vett);
@@ -67,12 +78,17 @@ int main()
 	cout << "Vettori Cecchi non ordinati" << endl;
 	stampa(V1_cecchi->v);
 	stampa(V2_cecchi->v);
+<<<<<<< HEAD
 
 	cout << "\nInizio (D'Angelo)\n";
 
 	stampa(S1_Dangelo->vett);
 	stampa(S2_Dangelo->vett);
 
+=======
+	stampa(V1_Raddi->vettore);
+	stampa(V2_Raddi->vettore);
+>>>>>>> 6d2ce7f2e1d01b506672f67d4b7c01ff89d00067
 	cout << endl;
 
 	system("pause");
@@ -91,10 +107,17 @@ int main()
 	
 	HANDLE ThreadCecchi1= (HANDLE)_beginthreadex(NULL, NULL, ThreadCecchi, (void*)V1_cecchi, NULL, 0);
 	HANDLE ThreadCecchi2 = (HANDLE)_beginthreadex(NULL, NULL, ThreadCecchi, (void*)V2_cecchi, NULL, 0);
+	HANDLE ThreadRaddi1= (HANDLE)_beginthreadex(NULL, NULL, Raddi_Ordina, (void*)V1_Raddi, NULL, 0);
+	HANDLE ThreadRaddi2 = (HANDLE)_beginthreadex(NULL, NULL, Raddi_Ordina, (void*)V2_Raddi, NULL, 0);
 
+<<<<<<< HEAD
 	HANDLE TH1_Dangelo = (HANDLE)_beginthreadex(NULL, NULL, Dangelo_Ordina, (void*)S1_Dangelo, NULL, 0);
 	HANDLE TH2_Dangelo = (HANDLE)_beginthreadex(NULL, NULL, Dangelo_Ordina, (void*)S2_Dangelo, NULL, 0);
 
+=======
+	WaitForSingleObject(ThreadRaddi1, Time);
+	WaitForSingleObject(ThreadRaddi2, Time);
+>>>>>>> 6d2ce7f2e1d01b506672f67d4b7c01ff89d00067
 	DWORD Await1 = WaitForSingleObject(TH1_tarchi, Time);
 	DWORD Await2 = WaitForSingleObject(TH2_tarchi, Time);
 	
@@ -120,6 +143,8 @@ int main()
 	cout << "Vettori Cecchi ordinati" << endl;
 	stampa(V1_cecchi->v);
 	stampa(V2_cecchi->v);
+	stampa(V1_Raddi->vettore);
+	stampa(V2_Raddi->vettore);
 
 	
 	cout << "\nFine (D'Angelo)\n";
@@ -152,6 +177,8 @@ int main()
 	
 	CloseHandle(V1_cecchi->s);
 	CloseHandle(V2_cecchi->s);
+	CloseHandle(V1_Raddi->semaphore);
+	CloseHandle(V2_Raddi->semaphore);
 
 	CloseHandle(TH1_Dangelo);
 	CloseHandle(TH1_Dangelo);
@@ -164,7 +191,8 @@ int main()
 	
 	delete V1_cecchi;
 	delete V2_cecchi;
-    
+	delete V1_Raddi;
+	delete V2_Raddi;
     
     //inizio Becucci
     Struttura_Becucci* V1_becucci = new Struttura_Becucci;
