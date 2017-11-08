@@ -1,12 +1,10 @@
 #pragma once
 #include <Windows.h>
-
 #define MAX 5
-
-struct Struttura_Tarchi
+struct Struttura_Fabbri
 {
 	HANDLE sem;
 	int vett[MAX];
 };
+unsigned __stdcall mythread_Fabbri_Guido(void* data);
 
-unsigned __stdcall Tarchi_mythread(void* data);
